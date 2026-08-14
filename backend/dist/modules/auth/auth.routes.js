@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_controller_1 = require("./auth.controller");
+const auth_validation_1 = require("./auth.validation");
+const validation_middleware_1 = require("../../middleware/validation.middleware");
+const rateLimit_middleware_1 = require("../../middleware/rateLimit.middleware");
+const auth_middleware_1 = require("../../middleware/auth.middleware");
+const router = (0, express_1.Router)();
+router.post('/register', rateLimit_middleware_1.sensitiveLimiter, (0, validation_middleware_1.validateRequest)(auth_validation_1.registerSchema), auth_controller_1.AuthController.register);
+router.post('/login', rateLimit_middleware_1.sensitiveLimiter, (0, validation_middleware_1.validateRequest)(auth_validation_1.loginSchema), auth_controller_1.AuthController.login);
+router.post('/google-login', rateLimit_middleware_1.sensitiveLimiter, auth_controller_1.AuthController.googleLogin);
+router.post('/refresh', auth_controller_1.AuthController.refresh);
+router.post('/logout', auth_controller_1.AuthController.logout);
+router.get('/me', auth_middleware_1.authenticate, auth_controller_1.AuthController.getProfile);
+exports.default = router;
