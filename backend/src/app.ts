@@ -23,6 +23,21 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // NoSQL Query & Input Sanitizer (Prevents MongoDB operator injection)
 app.use(noSqlSanitizer);
 
+// Welcome / Status Root Endpoint
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    status: 'HEALTHY',
+    service: 'BuyWithParlour E-Commerce API',
+    version: '1.0.0',
+    message: 'Backend server is running live and connected to MongoDB Atlas! 🚀',
+    endpoints: {
+      products: '/api/products',
+      categories: '/api/categories',
+      health: '/health',
+    },
+  });
+});
+
 // Health Check Endpoint
 app.get('/health', (_req, res) => {
   res.status(200).json({

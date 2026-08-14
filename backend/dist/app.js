@@ -23,6 +23,20 @@ app.use(express_1.default.json({ limit: '50mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));
 // NoSQL Query & Input Sanitizer (Prevents MongoDB operator injection)
 app.use(sanitize_middleware_1.noSqlSanitizer);
+// Welcome / Status Root Endpoint
+app.get('/', (_req, res) => {
+    res.status(200).json({
+        status: 'HEALTHY',
+        service: 'BuyWithParlour E-Commerce API',
+        version: '1.0.0',
+        message: 'Backend server is running live and connected to MongoDB Atlas! 🚀',
+        endpoints: {
+            products: '/api/products',
+            categories: '/api/categories',
+            health: '/health',
+        },
+    });
+});
 // Health Check Endpoint
 app.get('/health', (_req, res) => {
     res.status(200).json({
