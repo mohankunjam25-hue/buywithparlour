@@ -26,8 +26,8 @@ export const verifyRefreshToken = (token: string): TokenPayload => {
 export const sendRefreshTokenCookie = (res: Response, refreshToken: string): void => {
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: config.nodeEnv === 'production',
-    sameSite: config.nodeEnv === 'production' ? 'strict' : 'lax',
+    secure: true,
+    sameSite: 'none',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     path: '/api/auth/refresh',
   });
@@ -36,8 +36,8 @@ export const sendRefreshTokenCookie = (res: Response, refreshToken: string): voi
 export const clearRefreshTokenCookie = (res: Response): void => {
   res.clearCookie('refreshToken', {
     httpOnly: true,
-    secure: config.nodeEnv === 'production',
-    sameSite: config.nodeEnv === 'production' ? 'strict' : 'lax',
+    secure: true,
+    sameSite: 'none',
     path: '/api/auth/refresh',
   });
 };

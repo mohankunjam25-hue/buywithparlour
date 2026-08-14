@@ -25,8 +25,8 @@ exports.verifyRefreshToken = verifyRefreshToken;
 const sendRefreshTokenCookie = (res, refreshToken) => {
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: environment_1.config.nodeEnv === 'production',
-        sameSite: environment_1.config.nodeEnv === 'production' ? 'strict' : 'lax',
+        secure: true,
+        sameSite: 'none',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         path: '/api/auth/refresh',
     });
@@ -35,8 +35,8 @@ exports.sendRefreshTokenCookie = sendRefreshTokenCookie;
 const clearRefreshTokenCookie = (res) => {
     res.clearCookie('refreshToken', {
         httpOnly: true,
-        secure: environment_1.config.nodeEnv === 'production',
-        sameSite: environment_1.config.nodeEnv === 'production' ? 'strict' : 'lax',
+        secure: true,
+        sameSite: 'none',
         path: '/api/auth/refresh',
     });
 };

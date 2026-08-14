@@ -34,10 +34,32 @@ interface AuthState {
   checkAuth: () => Promise<void>;
 }
 
+// Read cached session on startup for instantaneous UX
+const cachedUser = (() => {
+  try {
+    const raw = localStorage.getItem('bwp_user');
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+})();
+
+const cachedToken = (() => {
+  try {
+    return localStorage.getItem('bwp_token');
+  } catch {
+    return null;
+  }
+})();
+
+if (cachedToken) {
+  setAccessToken(cachedToken);
+}
+
 export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  isAuthenticated: false,
-  isLoading: true,
+  user: cachedUser,
+  isAuthenticated: !!cachedUser && !!cachedToken,
+  isLoading: false,
   isAuthModalOpen: false,
   authRedirectPath: null,
 
@@ -56,6 +78,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
       const { user, accessToken } = response.data.data;
       setAccessToken(accessToken);
+      localStorage.setItem('bwp_token', accessToken);
+      localStorage.setItem('bwp_user', JSON.stringify(user));
       set({ user, isAuthenticated: true, isAuthModalOpen: false, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
@@ -75,6 +99,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
       const { user, accessToken } = response.data.data;
       setAccessToken(accessToken);
+      localStorage.setItem('bwp_token', accessToken);
+      localStorage.setItem('bwp_user', JSON.stringify(user));
       set({ user, isAuthenticated: true, isAuthModalOpen: false, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
@@ -92,6 +118,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
       const { user, accessToken } = response.data.data;
       setAccessToken(accessToken);
+      localStorage.setItem('bwp_token', accessToken);
+      localStorage.setItem('bwp_user', JSON.stringify(user));
       set({ user, isAuthenticated: true, isAuthModalOpen: false, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
@@ -107,27 +135,35 @@ export const useAuthStore = create<AuthState>((set) => ({
       // Ignore network errors on logout
     } finally {
       setAccessToken(null);
+      localStorage.removeItem('bwp_token');
+      localStorage.removeItem('bwp_user');
       set({ user: null, isAuthenticated: false, isLoading: false, authRedirectPath: null });
     }
   },
 
-  // 5. Silent Auth Session Recovery from HttpOnly Cookie
+  // 5. Silent Auth Session Recovery
   checkAuth: async () => {
-    set({ isLoading: true });
     try {
-      const refreshRes = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+      const refreshRes = await api.post('/auth/refresh');
       const newToken = refreshRes.data?.data?.accessToken;
       if (newToken) {
         setAccessToken(newToken);
+        localStorage.setItem('bwp_token', newToken);
         const profileRes = await api.get('/auth/me');
         const user = profileRes.data?.data?.user;
-        set({ user, isAuthenticated: true, isLoading: false });
-        return;
+        if (user) {
+          localStorage.setItem('bwp_user', JSON.stringify(user));
+          set({ user, isAuthenticated: true, isLoading: false });
+          return;
+        }
       }
     } catch {
-      // Cookie does not exist or expired
+      // Refresh token not available
     }
-    setAccessToken(null);
-    set({ user: null, isAuthenticated: false, isLoading: false });
+
+    if (!localStorage.getItem('bwp_token')) {
+      setAccessToken(null);
+      set({ user: null, isAuthenticated: false, isLoading: false });
+    }
   },
 }));
