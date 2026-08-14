@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: buywithparlour-api
+    env: node
+    plan: free
+    region: singapore
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: NODE_VERSION
+        value: 20.14.0
