@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment Variables & Secret Files (CRITICAL: Never commit to Git)
+.env
+.env.*
+!.env.example
+*.env
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary & Cache
+.cache/
+.eslintcache
+.stylelintcache
+tmp/
+temp/

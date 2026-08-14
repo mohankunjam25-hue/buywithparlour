@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #2874F0;
+  --color-accent: #F7E200;
+  --color-promo: #F09120;
+
+  --color-text-primary: #212121;
+  --color-text-secondary: #666666;
+  --color-text-muted: #878787;
+
+  --color-background: #F1F3F6;
+  --color-surface: #FFFFFF;
+
+  --color-border: #E0E0E0;
+  --color-border-light: #EEEEEE;
+
+  --color-success: #2E7D32;
+  --color-error: #D32F2F;
+  --color-warning: #ED6C02;
+  --color-info: #1976D2;
+
+  --font-family: "Inter", Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Flipkart-Style UI Utilities */
+.btn-primary {
+  background-color: #2874F0;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 4px;
+  height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease;
+}
+
+.btn-primary:hover {
+  background-color: #1259c7;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #2874F0;
+  border: 1px solid #2874F0;
+  font-weight: 600;
+  border-radius: 4px;
+  height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease;
+}
+
+.btn-promo {
+  background-color: #F7E200;
+  color: #212121;
+  font-weight: 600;
+  border-radius: 4px;
+  height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-ecommerce {
+  background-color: #FFFFFF;
+  border: 1px solid #EEEEEE;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  transition: box-shadow 150ms ease;
+}
+
+.card-ecommerce:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
