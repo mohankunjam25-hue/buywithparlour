@@ -17,6 +17,7 @@ import {
 import axios from 'axios';
 import { SellerNavbar } from '../../components/SellerNavbar';
 import { useSellerStore } from '../../store/sellerStore';
+import api from '../../services/api';
 
 type QCTabFilter = 'ALL' | 'LIVE' | 'IN_QC' | 'QC_FAILED' | 'DRAFT';
 
@@ -48,7 +49,7 @@ export const SellerDashboard: React.FC = () => {
   const fetchSellerProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/seller/products');
+      const res = await api.get('/seller/products');
       setProducts(res.data?.data?.products || []);
     } catch {
       // Keep existing
@@ -65,7 +66,7 @@ export const SellerDashboard: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`/api/seller/products/${id}`);
+      await api.delete(`/seller/products/${id}`);
       setProducts((prev) => prev.filter((p) => p._id !== id));
       setDeleteConfirmId(null);
     } catch (err) {

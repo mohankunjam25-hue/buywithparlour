@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import axios from 'axios';
+import api from '../services/api';
 
 export interface SellerProfileData {
   businessName: string;
@@ -64,7 +64,7 @@ export const useSellerStore = create<SellerStoreState>((set, get) => ({
   fetchProfile: async () => {
     set({ isLoading: true });
     try {
-      const res = await axios.get('/api/seller/profile');
+      const res = await api.get('/seller/profile');
       if (res.data?.data?.seller) {
         const fetched = res.data.data.seller;
         set({ profile: fetched, isLoading: false });
@@ -82,7 +82,7 @@ export const useSellerStore = create<SellerStoreState>((set, get) => ({
     const current = get().profile;
     const updated: SellerProfileData = { ...current, ...data };
     try {
-      await axios.patch('/api/seller/profile', updated);
+      await api.patch('/seller/profile', updated);
     } catch {
       // Persist locally
     }

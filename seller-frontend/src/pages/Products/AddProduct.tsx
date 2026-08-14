@@ -20,9 +20,9 @@ import {
   Layers,
   Sparkles,
 } from 'lucide-react';
-import axios from 'axios';
 import { SellerNavbar } from '../../components/SellerNavbar';
 import { useSellerStore } from '../../store/sellerStore';
+import api from '../../services/api';
 
 interface CategoryItem {
   _id: string;
@@ -79,8 +79,8 @@ export const AddProduct: React.FC = () => {
 
   // Fetch Categories & Optional Existing Product for Resubmission
   useEffect(() => {
-    axios
-      .get('/api/categories')
+    api
+      .get('/categories')
       .then((res) => {
         const list = res.data?.data?.categories || [];
         setCategories(list);
@@ -90,8 +90,8 @@ export const AddProduct: React.FC = () => {
       .finally(() => setLoadingCategories(false));
 
     if (editId) {
-      axios
-        .get('/api/seller/products')
+      api
+        .get('/seller/products')
         .then((res) => {
           const list = res.data?.data?.products || [];
           const target = list.find((p: any) => p._id === editId);
@@ -320,9 +320,9 @@ export const AddProduct: React.FC = () => {
       };
 
       if (editId) {
-        await axios.put(`/api/seller/products/${editId}`, payload);
+        await api.put(`/seller/products/${editId}`, payload);
       } else {
-        await axios.post('/api/seller/products', payload);
+        await api.post('/seller/products', payload);
       }
 
       setToastMessage(

@@ -10,6 +10,7 @@ import {
 import axios from 'axios';
 import { Sidebar, AdminTab } from '../../components/Sidebar';
 import { Header } from '../../components/Header';
+import api from '../../services/api';
 import { OverviewTab } from './OverviewTab';
 import { OrdersTab } from './OrdersTab';
 import { CouponsTab } from './CouponsTab';
@@ -58,7 +59,7 @@ export const AdminDashboard: React.FC = () => {
   const fetchModerationQueue = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/admin/products/pending');
+      const res = await api.get('/admin/products/pending');
       const items = res.data?.data?.products || [];
       setPendingProducts(items);
     } catch {
@@ -76,7 +77,7 @@ export const AdminDashboard: React.FC = () => {
 
   const handleApprove = async (productId: string) => {
     try {
-      await axios.patch(`/api/admin/products/${productId}/approve`);
+      await api.patch(`/admin/products/${productId}/approve`);
       setPendingProducts((prev) => prev.filter((p) => p._id !== productId));
       setApprovedProductsCount((prev) => prev + 1);
       setSelectedProductPreview(null);
@@ -90,7 +91,7 @@ export const AdminDashboard: React.FC = () => {
   const handleReject = async (productId: string) => {
     const reason = rejectionReason.trim() || 'Product details do not satisfy marketplace quality standards.';
     try {
-      await axios.patch(`/api/admin/products/${productId}/reject`, { rejectionReason: reason });
+      await api.patch(`/admin/products/${productId}/reject`, { rejectionReason: reason });
       setPendingProducts((prev) => prev.filter((p) => p._id !== productId));
       setRejectionModalId(null);
       setRejectionReason('');
