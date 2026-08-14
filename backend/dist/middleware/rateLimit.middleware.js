@@ -7,7 +7,7 @@ exports.sensitiveLimiter = exports.globalLimiter = void 0;
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 exports.globalLimiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // 100 requests per 15 min
+    max: 5000, // 5000 requests per 15 min for seamless multi-tab e-commerce browsing
     standardHeaders: true,
     legacyHeaders: false,
     message: {

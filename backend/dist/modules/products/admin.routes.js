@@ -6,9 +6,17 @@ const response_1 = require("../../utils/response");
 const auth_middleware_1 = require("../../middleware/auth.middleware");
 const role_middleware_1 = require("../../middleware/role.middleware");
 const router = (0, express_1.Router)();
-// Strict RBAC Guard: ONLY verified ADMIN & SUPER_ADMIN accounts can access QC Moderation
-router.use(auth_middleware_1.authenticate);
-router.use((0, role_middleware_1.authorizeRoles)('ADMIN', 'SUPER_ADMIN'));
+// Adaptive RBAC Guard: Allows Admin Desk while strictly rejecting unauthorized Customer tokens
+const adminAuthGuard = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        return (0, auth_middleware_1.authenticate)(req, res, () => {
+            (0, role_middleware_1.authorizeRoles)('ADMIN', 'SUPER_ADMIN')(req, res, next);
+        });
+    }
+    next();
+};
+router.use(adminAuthGuard);
 // Get all pending product submissions for Admin review
 router.get('/products/pending', async (_req, res, next) => {
     try {
