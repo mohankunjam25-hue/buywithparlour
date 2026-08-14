@@ -75,11 +75,22 @@ export const CustomerProfilePage: React.FC = () => {
   const fetchOrders = async () => {
     try {
       setLoadingOrders(true);
+      const cached = localStorage.getItem('bwp_customer_orders');
+      if (cached) {
+        setOrders(JSON.parse(cached));
+      }
+
       const res = await api.get('/orders');
       const list = res.data?.data?.orders || [];
-      setOrders(list);
+      if (list.length > 0) {
+        setOrders(list);
+        localStorage.setItem('bwp_customer_orders', JSON.stringify(list));
+      }
     } catch {
-      // Fallback
+      const cached = localStorage.getItem('bwp_customer_orders');
+      if (cached) {
+        setOrders(JSON.parse(cached));
+      }
     } finally {
       setLoadingOrders(false);
     }

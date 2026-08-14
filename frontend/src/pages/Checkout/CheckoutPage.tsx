@@ -139,6 +139,10 @@ export const CheckoutPage: React.FC = () => {
               try {
                 const order = await createOrderApi(orderPayload);
                 setOrderNumber(order.orderNumber);
+                try {
+                  const existing = JSON.parse(localStorage.getItem('bwp_customer_orders') || '[]');
+                  localStorage.setItem('bwp_customer_orders', JSON.stringify([order, ...existing]));
+                } catch {}
               } catch {
                 setOrderNumber(`BP-${Date.now().toString().slice(-6)}`);
               }
@@ -170,7 +174,12 @@ export const CheckoutPage: React.FC = () => {
         try {
           const order = await createOrderApi(orderPayload);
           setOrderNumber(order.orderNumber);
-        } catch {
+          try {
+            const existing = JSON.parse(localStorage.getItem('bwp_customer_orders') || '[]');
+            localStorage.setItem('bwp_customer_orders', JSON.stringify([order, ...existing]));
+          } catch {}
+        } catch (orderErr) {
+          console.error('Order creation notice:', orderErr);
           setOrderNumber(`BP-${Date.now().toString().slice(-6)}`);
         }
 

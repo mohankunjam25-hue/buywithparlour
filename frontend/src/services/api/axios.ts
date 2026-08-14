@@ -17,11 +17,10 @@ export const setAccessToken = (token: string | null) => {
   accessToken = token;
 };
 
-export const getAccessToken = () => accessToken;
-
 api.interceptors.request.use((config) => {
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  const token = accessToken || (typeof window !== 'undefined' ? localStorage.getItem('bwp_token') : null);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
