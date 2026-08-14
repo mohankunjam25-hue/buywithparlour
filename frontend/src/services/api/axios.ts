@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { Product } from '../../types/index';
 
+const BASE_API_URL = import.meta.env.VITE_API_BASE_URL || 'https://buywithparlour-3.onrender.com/api';
+
 export const api = axios.create({
-  baseURL: '/api',
+  baseURL: BASE_API_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

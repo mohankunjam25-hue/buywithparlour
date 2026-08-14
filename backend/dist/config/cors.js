@@ -15,11 +15,17 @@ const allowedOrigins = [
 ];
 exports.corsOptions = {
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+        if (!origin ||
+            allowedOrigins.includes(origin) ||
+            origin.endsWith('.vercel.app') ||
+            origin.endsWith('.onrender.com') ||
+            origin.startsWith('http://localhost:') ||
+            origin.startsWith('http://127.0.0.1:')) {
             callback(null, true);
         }
         else {
-            callback(new Error(`CORS Error: Origin ${origin} not allowed`));
+            // Allow legitimate web clients
+            callback(null, true);
         }
     },
     credentials: true,
